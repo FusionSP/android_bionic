@@ -1,11 +1,12 @@
 /*
- * Copyright (C) 2014 The Android Open Source Project
+ * Copyright 2015 Linaro Ltd.
+ * Bernhard Rosenkränzer <Bernhard.Rosenkranzer@linaro.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +15,14 @@
  * limitations under the License.
  */
 
-#include <gtest/gtest.h>
+#include <private/bionic_asm.h>
 
-#include <utmp.h>
+ENTRY(fabs)
+  fabs d0, d0
+  ret
+END(fabs)
 
-TEST(utmp, login_tty) {
-  // login_tty is tested indirectly by the openpty and forkpty tests.
-  // This test just checks that we're exporting the symbol independently.
-  ASSERT_EQ(-1, login_tty(-1));
-}
+ENTRY(fabsf)
+  fabs s0, s0
+  ret
+END(fabsf)

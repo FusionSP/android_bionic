@@ -2,13 +2,13 @@
 
 #include <private/bionic_asm.h>
 
-ENTRY(ioprio_get)
+ENTRY(ftruncate)
     mov     ip, r7
-    ldr     r7, =__NR_ioprio_get
+    ldr     r7, =__NR_ftruncate
     swi     #0
     mov     r7, ip
     cmn     r0, #(MAX_ERRNO + 1)
     bxls    lr
     neg     r0, r0
-    b       __set_errno
-END(ioprio_get)
+    b       __set_errno_internal
+END(ftruncate)

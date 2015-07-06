@@ -65,10 +65,6 @@ libc_common_src_files := \
     stdio/snprintf.c\
     stdio/sprintf.c \
 
-ifeq ($(TARGET_NEEDS_BIONIC_MD5),true)
-libc_common_src_files += bionic/md5.c
-endif
-
 # Fortify implementations of libc functions.
 libc_common_src_files += \
     bionic/__FD_chk.cpp \
@@ -88,6 +84,10 @@ libc_common_src_files += \
     bionic/__umask_chk.cpp \
     bionic/__vsnprintf_chk.cpp \
     bionic/__vsprintf_chk.cpp \
+
+ifeq ($(TARGET_NEEDS_BIONIC_MD5),true)
+    libc_common_src_files += bionic/md5.c
+endif
 
 libc_bionic_src_files := \
     bionic/abort.cpp \
@@ -116,13 +116,10 @@ libc_bionic_src_files := \
     bionic/__errno.cpp \
     bionic/eventfd_read.cpp \
     bionic/eventfd_write.cpp \
-    bionic/fchmod.cpp \
-    bionic/fchmodat.cpp \
     bionic/ffs.cpp \
     bionic/flockfile.cpp \
     bionic/fork.cpp \
     bionic/fpclassify.cpp \
-    bionic/ftruncate.cpp \
     bionic/futimens.cpp \
     bionic/getauxval.cpp \
     bionic/getcwd.cpp \
@@ -505,7 +502,6 @@ libc_arch_static_src_files := \
 libc_common_cflags := \
     -D_LIBC=1 \
     -Wall -Wextra -Wunused \
-    -fno-strict-aliasing \
 
 ifneq ($(TARGET_USES_LOGD),false)
 libc_common_cflags += -DTARGET_USES_LOGD
@@ -541,10 +537,6 @@ endif
 #
 ifneq ($(BOARD_MALLOC_ALIGNMENT),)
   libc_common_cflags += -DMALLOC_ALIGNMENT=$(BOARD_MALLOC_ALIGNMENT)
-endif
-
-ifeq ($(BOARD_USES_LEGACY_MMAP),true)
-  libc_common_cflags += -DLEGACY_MMAP
 endif
 
 # Define ANDROID_SMP appropriately.
@@ -1050,9 +1042,6 @@ LOCAL_REQUIRED_MODULES := tzdata
 # meaningful name resolution.
 LOCAL_STRIP_MODULE := keep_symbols
 
-# Do not pack libc.so relocations; see http://b/20645321 for details.
-LOCAL_PACK_MODULE_RELOCATIONS := false
-
 # WARNING: The only library libc.so should depend on is libdl.so!  If you add other libraries,
 # make sure to add -Wl,--exclude-libs=libgcc.a to the LOCAL_LDFLAGS for those libraries.  This
 # ensures that symbols that are pulled into those new libraries from libgcc.a are not declared
@@ -1093,6 +1082,7 @@ include $(BUILD_SHARED_LIBRARY)
 # the checks are available only in emulator and are implemeted in
 # libc_malloc_qemu_instrumented.so.
 ifneq ($(TARGET_BUILD_VARIANT),user)
+ifneq ($(TARGET_BUILD_VARIANT),userdebug)
 
 # ========================================================
 # libc_malloc_debug_leak.so
@@ -1166,6 +1156,7 @@ LOCAL_MODULE_TAGS := eng debug
 $(eval $(call patch-up-arch-specific-flags,LOCAL_CFLAGS,libc_common_cflags))
 include $(BUILD_SHARED_LIBRARY)
 
+endif  #!userdebug
 endif  #!user
 
 # ========================================================

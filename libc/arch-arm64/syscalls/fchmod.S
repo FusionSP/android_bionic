@@ -2,7 +2,7 @@
 
 #include <private/bionic_asm.h>
 
-ENTRY(__fchmod)
+ENTRY(fchmod)
     mov     x8, __NR_fchmod
     svc     #0
 
@@ -11,5 +11,4 @@ ENTRY(__fchmod)
     b.hi    __set_errno_internal
 
     ret
-END(__fchmod)
-.hidden __fchmod
+END(fchmod)

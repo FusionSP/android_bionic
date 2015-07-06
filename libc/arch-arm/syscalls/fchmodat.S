@@ -2,7 +2,7 @@
 
 #include <private/bionic_asm.h>
 
-ENTRY(__fchmodat)
+ENTRY(fchmodat)
     mov     ip, r7
     ldr     r7, =__NR_fchmodat
     swi     #0
@@ -11,4 +11,4 @@ ENTRY(__fchmodat)
     bxls    lr
     neg     r0, r0
     b       __set_errno_internal
-END(__fchmodat)
+END(fchmodat)

@@ -29,7 +29,6 @@ LOCAL_CFLAGS += \
     -Wstrict-overflow=5 \
     -fvisibility=hidden \
     -Wall -Wextra -Wunused -Werror \
-    -fno-strict-aliasing \
 
 LOCAL_CONLYFLAGS += \
     -std=gnu11 \
